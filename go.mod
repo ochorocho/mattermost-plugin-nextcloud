@@ -1,4 +1,4 @@
-module github.com/ochorcho/mattermost-nextcloud
+module github.com/ochorcho/mattermost-plugin-nextcloud
 
 go 1.12
 
