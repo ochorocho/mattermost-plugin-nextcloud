@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/ochorocho/mattermost-plugin-nextcloud/server/nextcloud"
 	"io/ioutil"
 	"net/http"
-	"github.com/ochorocho/mattermost-plugin-nextcloud/server/nextcloud"
 	"path/filepath"
 	"sync"
 )
@@ -45,7 +45,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 
 	switch r.URL.Path {
 	case "/status":
-		roomList := nextcloud.Request{"spreed", "room", "GET", ""}
+		roomList := nextcloud.Client{"spreed", "room", "GET", ""}
 
 		w.Header().Set("Content-Type", "application/json")
 		if _, err := w.Write([]byte(roomList.Request())); err != nil {

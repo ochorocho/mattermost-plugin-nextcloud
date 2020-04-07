@@ -11,17 +11,17 @@ import (
 )
 
 type Client struct {
-	app string
-	endpoint string
-	method string
-	body string
+	App string
+	Endpoint string
+	Method string
+	Body string
 }
 
 func (nc Client) Request() string {
 
-	buffer := bytes.NewBufferString(nc.body)
+	buffer := bytes.NewBufferString(nc.Body)
 
-	req, err := http.NewRequest(nc.method, "https://cloud.nextcloud.org/ocs/v2.php/apps/"+ nc.app +"/api/v1/" + nc.endpoint, buffer)
+	req, err := http.NewRequest(nc.Method, "https://cloud.nextcloud.org/ocs/v2.php/apps/"+ nc.App +"/api/v1/" + nc.Endpoint, buffer)
 	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
