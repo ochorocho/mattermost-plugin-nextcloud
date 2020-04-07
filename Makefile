@@ -195,7 +195,7 @@ endif
 	rm -fr build/bin/
 
 install:
-	make deploy && cd ../mattermost-server/ && make restart-server && cd ../mattermost-nextcloud/
+	make deploy && cd ../mattermost-server/ && make restart-server && cd ../mattermost-plugin-nextcloud/
 
 # Help documentation à la https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help:
