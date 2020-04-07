@@ -1,6 +1,8 @@
 var path = require('path');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 module.exports = {
+    mode: 'development',
     entry: [
         './src/index.js',
     ],
@@ -39,4 +41,13 @@ module.exports = {
         publicPath: '/',
         filename: 'main.js',
     },
+    plugins: [
+        new WebpackShellPluginNext({
+            onBuildEnd: {
+                scripts: ['cd ../ && make install'],
+                blocking: false,
+                parallel: true,
+            },
+        }),
+    ],
 };

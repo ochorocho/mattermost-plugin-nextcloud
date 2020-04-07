@@ -2,9 +2,9 @@
 
 const manifest = JSON.parse(`
 {
-    "id": "com.mattermost.plugin-starter-template",
-    "name": "Plugin Starter Template",
-    "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
+    "id": "com.ochorocho.nextcloud",
+    "name": "Nextcloud Talk",
+    "description": "Integrates Nextcloud Talk",
     "version": "0.1.0",
     "min_server_version": "5.12.0",
     "server": {
@@ -19,9 +19,18 @@ const manifest = JSON.parse(`
         "bundle_path": "webapp/dist/main.js"
     },
     "settings_schema": {
-        "header": "",
+        "header": "Configure Nextcloud instance settings below",
         "footer": "",
-        "settings": []
+        "settings": [
+            {
+                "key": "NextcloudURL",
+                "display_name": "Nextcloud URL",
+                "type": "text",
+                "help_text": "The URL for a self-hosted Nextcloud server.",
+                "placeholder": "https://example.com",
+                "default": null
+            }
+        ]
     }
 }
 `);
