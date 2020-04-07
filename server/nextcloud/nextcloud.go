@@ -2,6 +2,7 @@ package nextcloud
 
 import (
 	"bytes"
+	"github.com/basgys/goxml2json"
 	"io/ioutil"
 	"log"
 	"net/http"

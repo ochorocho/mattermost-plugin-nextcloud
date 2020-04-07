@@ -6,7 +6,7 @@ import (
 	"github.com/mattermost/mattermost-server/v5/plugin"
 	"io/ioutil"
 	"net/http"
-	//"github.com/ochorocho/mattermost-plugin-nextcloud/server/nextcloud"
+	"github.com/ochorocho/mattermost-plugin-nextcloud/server/nextcloud"
 	"path/filepath"
 	"sync"
 )
