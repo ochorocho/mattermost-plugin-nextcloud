@@ -10,7 +10,7 @@ import {Svgs} from '../../constants';
 
 // import {formatDate} from '../../utils/date_utils';
 
-export default class PostTypeZoom extends React.PureComponent {
+export default class PostTypeNextcloud extends React.PureComponent {
     static propTypes = {
 
         /*

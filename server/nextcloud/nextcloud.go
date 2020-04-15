@@ -11,24 +11,27 @@ import (
 )
 
 type Client struct {
-	App string
 	Endpoint string
-	Method string
-	Body string
+	Method   string
+	Body     string
 }
 
 func (nc Client) Request() string {
 
 	buffer := bytes.NewBufferString(nc.Body)
 
-	req, err := http.NewRequest(nc.Method, "https://cloud.nextcloud.org/ocs/v2.php/apps/"+ nc.App +"/api/v1/" + nc.Endpoint, buffer)
+	// https://cloud.knallimall.org/ocs/v2.php/
+	// 								cloud/capabilities
+	//								apps/spreed/api/v1/room
+
+	req, err := http.NewRequest(nc.Method, "https://cloud.knallimall.org/ocs/v2.php/"+nc.Endpoint, buffer)
 	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
 
 	req.Header.Add("OCS-APIRequest", "true")
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth("XXXXX", "XXXXXX")
+	req.SetBasicAuth("admin", "XXXXXXX")
 
 	client := &http.Client{Timeout: time.Second * 5}
 

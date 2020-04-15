@@ -9,7 +9,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import {startMeeting} from '../../actions';
 
-import PostTypeZoom from './post_type_zoom.jsx';
+import PostTypeZoom from './post_type_nextcloud.jsx';
 
 function mapStateToProps(state, ownProps) {
     return {

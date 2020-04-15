@@ -20,6 +20,9 @@ import (
 type configuration struct {
 	// The user to use as part of the demo plugin, created automatically if it does not exist.
 	NextcloudURL string
+
+	// disabled tracks whether or not the plugin has been disabled after activation. It always starts enabled.
+	disabled bool
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if

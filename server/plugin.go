@@ -5,6 +5,7 @@ import (
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/ochorocho/mattermost-plugin-nextcloud/server/nextcloud"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -31,18 +32,13 @@ type Plugin struct {
 	configuration *configuration
 }
 
-
-
 type Rooms struct {
 	Name string
-	Id  int
+	Id   int
 }
-
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-	//fmt.Fprint(w, "Hello, world!")
-
 	switch r.URL.Path {
 	case "/status":
 		roomList := nextcloud.Client{"spreed", "room", "GET", ""}
@@ -65,7 +61,6 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 			http.Error(w, appErr.Error(), appErr.StatusCode)
 			return
 		}
-
 	}
 }
 
@@ -77,13 +72,13 @@ func (p *Plugin) postMeeting(creatorUsername string, meetingID int, channelID st
 		UserId:    p.botUserID,
 		ChannelId: "sb4u9sxabpbq3qtaf1qod4fkuc",
 		Message:   fmt.Sprintf("Meeting started at %s.", meetingURL),
-		Type:      "custom_zoom",
+		Type:      "custom_nextcloud",
 		Props: map[string]interface{}{
 			"meeting_id":               "meetingID",
 			"meeting_link":             "meetingURL",
-			"meeting_status":           creatorUsername + "########",
+			"meeting_status":           creatorUsername + " Created new conversation",
 			"meeting_personal":         true,
-			"meeting_topic":            topic + "<h1>ldkjdslkadj</h1>",
+			"meeting_topic":            topic,
 			"meeting_creator_username": creatorUsername,
 		},
 	}
@@ -106,6 +101,7 @@ func (p *Plugin) OnActivate() error {
 	if err != nil {
 		//return errors.Wrap(err, "failed to ensure bot account")
 	}
+
 	p.botUserID = botUserID
 
 	bundlePath, err := p.API.GetBundlePath()
@@ -113,9 +109,9 @@ func (p *Plugin) OnActivate() error {
 		//return errors.Wrap(err, "couldn't get bundle path")
 	}
 
-	//if err = p.API.RegisterCommand(getCommand()); err != nil {
-	//	//return errors.WithMessage(err, "OnActivate: failed to register command")
-	//}
+	if err := p.registerCommands(); err != nil {
+		return errors.Wrap(err, "failed to register Nextcloud commands")
+	}
 
 	profileImage, err := ioutil.ReadFile(filepath.Join(bundlePath, "assets", "profile.png"))
 	if err != nil {
@@ -126,7 +122,55 @@ func (p *Plugin) OnActivate() error {
 		//return errors.Wrap(appErr, "couldn't set profile image")
 	}
 
-	//p.zoomClient = zoom.NewClient(config.ZoomAPIURL, config.APIKey, config.APISecret)
-
 	return nil
 }
+
+//func (p *Plugin) handleDialog1(w http.ResponseWriter, r *http.Request) {
+//	request := model.SubmitDialogRequestFromJson(r.Body)
+//	if request == nil {
+//		p.API.LogError("failed to decode SubmitDialogRequest")
+//		w.WriteHeader(http.StatusBadRequest)
+//		return
+//	}
+//
+//	user, appErr := p.API.GetUser(request.UserId)
+//	if appErr != nil {
+//		p.API.LogError("failed to get user for dialog", "err", appErr.Error())
+//		w.WriteHeader(http.StatusNotFound)
+//		return
+//	}
+//
+//	if !request.Cancelled {
+//		var keyUrl = user.Id + "_nextcloud_url"
+//		p.API.KVSet(keyUrl, []byte(request.Submission["url"].(string)))
+//
+//		var keyUsername = user.Id + "_nextcloud_username"
+//		p.API.KVSet(keyUsername, []byte(request.Submission["username"].(string)))
+//
+//		var keyPassword = user.Id + "_nextcloud_password"
+//		p.API.KVSet(keyPassword, []byte(request.Submission["password"].(string)))
+//
+//		url, err := p.API.KVGet(keyUrl)
+//		if err != nil {
+//			p.API.LogError("Could not get Nextcloud url")
+//		}
+//
+//		username, err := p.API.KVGet(keyUsername)
+//		if err != nil {
+//			p.API.LogError("Could not get Nextcloud username")
+//		}
+//
+//		_, err = p.API.KVGet(keyPassword)
+//		if err != nil {
+//			p.API.LogError("Could not get Nextcloud app password")
+//		}
+//
+//		p.API.SendEphemeralPost(user.Id, &model.Post{
+//			UserId: p.botUserID,
+//			ChannelId: request.ChannelId,
+//			Message: "Credentials for " + string(username) + " on " + string(url) + " set.",
+//		})
+//	}
+//
+//	w.WriteHeader(http.StatusOK)
+//}
