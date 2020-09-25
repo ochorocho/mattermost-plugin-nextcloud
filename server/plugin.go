@@ -41,7 +41,7 @@ type Rooms struct {
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/status":
-		roomList := nextcloud.Client{"spreed", "room", "GET", ""}
+		roomList := nextcloud.Client{"apps/spreed/api/v1/room", "GET", ""}
 
 		w.Header().Set("Content-Type", "application/json")
 		if _, err := w.Write([]byte(roomList.Request())); err != nil {
